@@ -31,7 +31,6 @@ version '1.5.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
 jar {
     baseName = 'web3j-spring-boot-sample'
     version =  '0.1.0'

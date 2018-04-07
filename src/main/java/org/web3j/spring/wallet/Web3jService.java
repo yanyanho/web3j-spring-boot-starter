@@ -41,7 +41,7 @@ public class Web3jService {
 
     public  Credentials loadCredentials(String password, String jsonFile) throws IOException, CipherException {
         //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
-         return   WalletUtils.loadCredentials(password,  jsonFile);
+         return  WalletUtils.loadCredentials(password,  jsonFile);
     }
 
 
