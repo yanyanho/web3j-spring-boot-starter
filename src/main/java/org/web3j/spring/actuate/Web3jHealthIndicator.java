@@ -1,5 +1,6 @@
 package org.web3j.spring.actuate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.util.Assert;
@@ -14,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class Web3jHealthIndicator extends AbstractHealthIndicator {
 
+    @Autowired
     private Web3j web3j;
 
     public Web3jHealthIndicator(Web3j web3j) {
