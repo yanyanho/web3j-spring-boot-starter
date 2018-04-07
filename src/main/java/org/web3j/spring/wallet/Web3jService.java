@@ -22,9 +22,7 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
-/**
- * Sample service to demonstrate web3j bean being correctly injected.
- */
+
 @Service
 public class Web3jService {
 

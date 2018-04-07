@@ -18,9 +18,9 @@ public class Web3jController {
         return web3jService.getClientVersion();
     }
 
-    @RequestMapping(value = "/new-wallet", method = RequestMethod.GET)
-    String getNewWallert() {
-        return web3jService.getClientVersion();
+    @RequestMapping(value = "/new-wallet/{password}", method = RequestMethod.GET)
+    String getNewWallert(@PathVariable String password) throws Exception {
+        return web3jService.newWallet(password);
     }
 
     @RequestMapping(value ="/{address}/balance", method = RequestMethod.GET)
