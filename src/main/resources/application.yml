@@ -1,4 +1,4 @@
 web3j:
   client-address: https://mainnet.infura.io/A6YAM6J99HuuW8LafBEv
-  admin-client: false
+  admin-client: true
   httpTimeoutSeconds: 600

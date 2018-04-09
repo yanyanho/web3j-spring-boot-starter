@@ -35,6 +35,12 @@ public class Web3jController {
     }
 
 
+//    @RequestMapping(value="/transfer/password", method = RequestMethod.GET)
+//    void transfer(@RequestParam  String address , @RequestParam  String password , @RequestParam  String toAddress , @RequestParam double value) throws Exception {
+//           web3jService.unlockWallet(address, password, toAddress,  value);
+//    }
+
+
 
 
 
