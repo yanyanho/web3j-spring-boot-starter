@@ -73,7 +73,7 @@ public class Web3jService {
 
     public String newWallet(String password) throws Exception {
         String fileName = WalletUtils.generateNewWalletFile(
-                password, new File("/Users/ruanyang/works/code/web3j/web3j-spring-boot-starter/src/main/resources/wallet"),false);
+                password, new File("src/main/resources/wallet"),false);
         String[] fetchAddress=fileName.split("--");
         String getAddress = fetchAddress[fetchAddress.length-1].split("\\.")[0];
 
