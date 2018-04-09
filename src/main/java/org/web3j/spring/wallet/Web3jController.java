@@ -1,11 +1,12 @@
 package org.web3j.spring.wallet;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @RestController
@@ -27,6 +28,14 @@ public class Web3jController {
     BigInteger getBalance(@PathVariable String address) {
         return web3jService.getBalance(address);
     }
+
+    @RequestMapping(value="/transfer", method = RequestMethod.GET)
+    TransactionReceipt transfer(@RequestParam  String address , @RequestParam double value, @RequestParam Credentials credentials) throws Exception {
+        return   web3jService.transaction(address, value,  credentials);
+    }
+
+
+
 
 
 
