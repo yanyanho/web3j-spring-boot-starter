@@ -50,6 +50,11 @@ public class Web3jService {
         return WalletUtils.loadCredentials(password, jsonFile);
     }
 
+    public Credentials loadCredentialsByJsonFile(String password, File jsonFile) throws IOException, CipherException {
+        //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
+        return WalletUtils.loadCredentials(password, jsonFile);
+    }
+
 
     public TransactionReceipt transaction(String address, double ethBalance, Credentials credentials) throws Exception {
         return Transfer.sendFunds(web3j, credentials, address, BigDecimal.valueOf(ethBalance), Convert.Unit.ETHER).send();
@@ -105,6 +110,10 @@ public class Web3jService {
             transfer.sendFunds(toAddress, BigDecimal.valueOf(ethBalance), Convert.Unit.ETHER);
         }
     }
+
+//    public void getJsonFileByAddresee(String address) {
+//        for(File file : )
+//    }
 }
 
 
