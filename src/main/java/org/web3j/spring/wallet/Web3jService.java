@@ -3,24 +3,18 @@ package org.web3j.spring.wallet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.EthGetBalance;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -47,10 +41,10 @@ public class Web3jService {
     private static final Logger log = LoggerFactory.getLogger(Web3jService.class);
 
 
-    public Credentials loadCredentials(String password, String jsonFile) throws IOException, CipherException {
-        //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
-        return WalletUtils.loadCredentials(password, jsonFile);
-    }
+//    public Credentials loadCredentials(String password, String jsonFile) throws IOException, CipherException {
+//        //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
+//        return WalletUtils.loadCredentials(password, jsonFile);
+//    }
 
     public Credentials loadCredentialsByJsonFile(String password, File jsonFile) throws IOException, CipherException {
         //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
@@ -74,6 +68,11 @@ public class Web3jService {
 
     public String getWalletAddress(Credentials credentials) {
         return credentials.getAddress();
+    }
+
+
+    public TransactionReceipt ethGetTransactionReceipt(String transactionHash) throws IOException {
+       return  web3j.ethGetTransactionReceipt(transactionHash).send().getTransactionReceipt().get();
     }
 
     public String getClientVersion() {
