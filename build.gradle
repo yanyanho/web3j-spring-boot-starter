@@ -33,7 +33,7 @@ targetCompatibility = 1.8
 
 jar {
     baseName = 'web3j-spring-boot-sample'
-    version =  '0.1.0'
+    version = '0.1.0'
 }
 
 
@@ -43,9 +43,14 @@ repositories {
 
 dependencies {
 
-    compile ('org.web3j:web3j-spring-boot-starter:1.6.0')
-            // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    compile ("org.springframework.boot:spring-boot-starter-web")
+    compile 'org.web3j:web3j-spring-boot-starter:1.6.0'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework:spring-test:4.3.12.RELEASE"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+//    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.4.2'
+
 
     //compile("org.springframework.boot:spring-boot-starter-parent:1.2.5.RELEASE")
     //compile 'org.springframework.boot:spring-boot-starter-security'
