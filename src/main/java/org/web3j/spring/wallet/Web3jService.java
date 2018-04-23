@@ -19,7 +19,6 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.spring.token.Erc20TokenWrapper;
 import org.web3j.tx.Contract;
-import org.web3j.tx.ManagedTransaction;
 import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
@@ -32,6 +31,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
+
 
 //https://stevenocean.github.io/2018/04/06/web3j-ethereum-token.html
 @Service
@@ -52,10 +53,10 @@ public class Web3jService {
     private static final Logger log = LoggerFactory.getLogger(Web3jService.class);
 
 
-    public Credentials loadCredentials(String password, String jsonFile) throws IOException, CipherException {
-        //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
-        return WalletUtils.loadCredentials(password, jsonFile);
-    }
+//    public Credentials loadCredentials(String password, String jsonFile) throws IOException, CipherException {
+//        //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
+//        return WalletUtils.loadCredentials(password, jsonFile);
+//    }
 
     public Credentials loadCredentialsByJsonFile(String password, File jsonFile) throws IOException, CipherException {
         //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
@@ -81,6 +82,11 @@ public class Web3jService {
         return credentials.getAddress();
     }
 
+
+    public TransactionReceipt ethGetTransactionReceipt(String transactionHash) throws IOException {
+       return  web3j.ethGetTransactionReceipt(transactionHash).send().getTransactionReceipt().get();
+    }
+
     public String getClientVersion() {
         Web3ClientVersion web3ClientVersion = null;
         try {
@@ -91,16 +97,21 @@ public class Web3jService {
         return web3ClientVersion.getWeb3ClientVersion();
     }
 
-    public String newWallet(String password) throws Exception {
+    public File newWallet(String password) throws Exception {
         String fileName = WalletUtils.generateNewWalletFile(
                 password, new File("src/main/resources/wallet"), false);
-        String[] fetchAddress = fileName.split("--");
-        String getAddress = fetchAddress[fetchAddress.length - 1].split("\\.")[0];
 
-        log.info("walletFileName>>>>>" + fileName.substring(0));
-        log.info("walletFile Address>>>>>" + "0x" + getAddress);
-
-        return fileName;
+//        log.info("walletFileName>>>>>" + "src/main/resources/wallet/"+fileName);
+//        String fileName = "123.xls";
+        File file = new File("src/main/resources/wallet/"+fileName);
+       // FileInputStream inputStream = new FileInputStream(new File("src/main/resources/wallet/"+fileName));
+        return file;
+//        return null;
+//        String[] fetchAddress = fileName.split("--");
+//        String getAddress = fetchAddress[fetchAddress.length - 1].split("\\.")[0];
+//
+//        log.info("walletFileName>>>>>" + fileName.substring(0));
+//        log.info("walletFile Address>>>>>" + "0x" + getAddress);
     }
 
 
