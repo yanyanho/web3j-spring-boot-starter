@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @RestController
@@ -32,6 +30,11 @@ public class Web3jController {
     @RequestMapping(value="/transfer", method = RequestMethod.GET)
     TransactionReceipt transfer(@RequestParam  String address , @RequestParam double value, @RequestParam Credentials credentials) throws Exception {
         return   web3jService.transaction(address, value,  credentials);
+    }
+
+    @RequestMapping(value="/transfer/erc20", method = RequestMethod.GET)
+    String transfer(@RequestParam  String contractAddress ,@RequestParam  Credentials credentials , @RequestParam String toAddress, @RequestParam double amount) throws Exception {
+        return   web3jService.transactionErc20Token(contractAddress, credentials, toAddress, amount);
     }
 
 

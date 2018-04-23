@@ -1,6 +1,7 @@
 package org.web3j.spring.autoconfigure;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import static org.web3j.spring.autoconfigure.Web3jProperties.WEB3J_PREFIX;
 

@@ -1,45 +1,52 @@
 package org.web3j.spring.wallet;
 
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.admin.Admin;
-import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.EthGetBalance;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.core.methods.response.*;
+import org.web3j.spring.token.Erc20TokenWrapper;
+import org.web3j.tx.Contract;
+import org.web3j.tx.ManagedTransaction;
+import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
+//https://stevenocean.github.io/2018/04/06/web3j-ethereum-token.html
 @Service
 public class Web3jService {
 
-    @Autowired
-    private Web3j web3j;
 
     @Autowired
-    private Admin web3jAdmin;
+    Web3j web3j;
+
+    public static final BigInteger gas_price = BigInteger.valueOf(2_000_000_000L);
 
     //private Credentials credentials;
 
-    @Autowired
-    private Transfer transfer;
+//    @Autowired
+//    private Transfer transfer;
 
 
     private static final Logger log = LoggerFactory.getLogger(Web3jService.class);
@@ -104,17 +111,47 @@ public class Web3jService {
         return nonce;
     }
 
-    public void unlockWallet(String address, String password, String toAddress, double ethBalance) throws ExecutionException, InterruptedException {
-        PersonalUnlockAccount personalUnlockAccount = web3jAdmin.personalUnlockAccount(address, password).sendAsync().get();
-        if (personalUnlockAccount.accountUnlocked()) {
-            transfer.sendFunds(toAddress, BigDecimal.valueOf(ethBalance), Convert.Unit.ETHER);
-        }
-    }
+//    public void unlockWallet(String address, String password, String toAddress, double ethBalance) throws ExecutionException, InterruptedException {
+//        PersonalUnlockAccount personalUnlockAccount = web3jAdmin.personalUnlockAccount(address, password).sendAsync().get();
+//        if (personalUnlockAccount.accountUnlocked()) {
+//            transfer.sendFunds(toAddress, BigDecimal.valueOf(ethBalance), Convert.Unit.ETHER);
+//        }
+//    }
 
 //    public void getJsonFileByAddresee(String address) {
 //        for(File file : )
 //    }
-}
 
+    public String transactionErc20Token(String contractAddress, Credentials credentials, String toAddress, double amount) throws IOException {
+
+        //通过load智能合约调用transfer函数；
+        //load(String BINARY, String contractAddress, Web3j web3j, Credentials credentials) {
+        //     Erc20TokenWrapper erc20TokenWrapper = Erc20TokenWrapper.load(binary,contractAddress,web3j,credentials,gas_price, Contract.GAS_LIMIT);
+        //    Uint256 amount1 = Uint256(BigInteger.valueOf(amount));
+        //  return erc20TokenWrapper.transfer(toAddress, amount1);
+
+        Erc20TokenWrapper contract1 = Erc20TokenWrapper.load(contractAddress, web3j, credentials, gas_price, Contract.GAS_LIMIT);
+
+        Uint8 decimal = contract1.decimals();
+
+        BigInteger amountBigInteger = new BigDecimal(amount).multiply(BigDecimal.TEN.pow(decimal.getValue().intValue())).toBigInteger();
+
+        Function function = new Function(
+                "transfer",
+                Arrays.<Type>asList(new Address(toAddress),
+                        new Uint256(amountBigInteger)),
+                Collections.<TypeReference<?>>emptyList());
+        String encodedFunction = FunctionEncoder.encode(function);
+
+        // 创建 tx 管理器，并通过 txManager 来发起合约转账
+        RawTransactionManager txManager = new RawTransactionManager(web3j, credentials);
+        EthSendTransaction transactionResponse = txManager.sendTransaction(
+                gas_price, Contract.GAS_LIMIT,
+                contractAddress, encodedFunction, BigInteger.ZERO);
+
+        // 获取 TxHash
+        return transactionResponse.getTransactionHash();
+    }
+}
 
 
