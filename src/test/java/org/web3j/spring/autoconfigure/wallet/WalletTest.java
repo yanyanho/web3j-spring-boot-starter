@@ -1,11 +1,12 @@
 package org.web3j.spring.autoconfigure.wallet;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 import org.web3j.abi.FunctionEncoder;
@@ -22,25 +23,34 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.spring.autoconfigure.ApiTestBase;
 import org.web3j.spring.token.Erc20TokenWrapper;
+import org.web3j.spring.wallet.FileContent;
+import org.web3j.spring.wallet.Web3jService;
 import org.web3j.tx.Contract;
 import org.web3j.tx.RawTransactionManager;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.web3j.spring.wallet.Web3jService.gas_price;
 
-@SpringBootApplication
-@RunWith(SpringRunner.class)
-public class WalletTest {
+
+
+public class WalletTest extends ApiTestBase{
 
 //    @Autowired
 //    RestTemplate restTemplate;
-
+     @Autowired
+    Web3jService web3jService;
 
     @Test
      public  void transferTest() {
@@ -53,6 +63,8 @@ public class WalletTest {
 
     }
 
+
+    @Ignore
     @Test
     public  void erc20TransferTest() throws IOException, CipherException, TransactionException {
 
@@ -93,6 +105,20 @@ public class WalletTest {
 
         // 获取 TxHash
         System.out.println( transactionResponse.getTransactionHash());
+    }
+
+    @Test
+    public void testBalance() {
+       BigInteger b = web3jService.getBalance("0xAb72506B1cB942180B4EB2398d7B7Fa79073e38C");
+       assertTrue(b.intValue()>0);
+    }
+
+    @Test public void testCreateNewWallet() throws Exception {
+
+        InputStream inputStream = new ClassPathResource("wallet/"+"UTC--2018-05-10T06-35-26.535000000Z--b6ac716329c5995e9a64899cd44ca5900bd98530.json").getInputStream();
+       FileContent file = web3jService.newWallet("hsy123456");
+       assertNotNull(file);
+       assertNotNull(file.getFileName());
     }
 
 }

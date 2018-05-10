@@ -3,6 +3,7 @@ package org.web3j.spring.wallet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -25,8 +26,10 @@ import org.web3j.utils.Convert;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
@@ -70,12 +73,12 @@ public class Web3jService {
 
 
     public BigInteger getBalance(String address) {
-        Future<EthGetBalance> ethGetBalanceFuture = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).sendAsync();
         try {
-            return ethGetBalanceFuture.get().getBalance();
-        } catch (Exception e) {
-            return BigInteger.ONE;
+            return   web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+      return BigInteger.ZERO;
     }
 
     public String getWalletAddress(Credentials credentials) {
@@ -97,15 +100,13 @@ public class Web3jService {
         return web3ClientVersion.getWeb3ClientVersion();
     }
 
-    public File newWallet(String password) throws Exception {
+    public FileContent newWallet(String password) throws Exception {
         String fileName = WalletUtils.generateNewWalletFile(
-                password, new File("src/main/resources/wallet"), false);
+                password, new ClassPathResource("wallet").getFile(), false);
+        Thread.sleep(1000);
 
-//        log.info("walletFileName>>>>>" + "src/main/resources/wallet/"+fileName);
-//        String fileName = "123.xls";
-        File file = new File("src/main/resources/wallet/"+fileName);
-       // FileInputStream inputStream = new FileInputStream(new File("src/main/resources/wallet/"+fileName));
-        return file;
+        InputStream inputStream = new ClassPathResource("wallet/"+fileName).getInputStream();
+        return new FileContent(fileName,inputStream);
 //        return null;
 //        String[] fetchAddress = fileName.split("--");
 //        String getAddress = fetchAddress[fetchAddress.length - 1].split("\\.")[0];

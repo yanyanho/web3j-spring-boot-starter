@@ -24,8 +24,8 @@ public class Web3jController {
     //创建钱包 输入密码，返回json文件
     @RequestMapping(value = "/new-wallet/{password}", method = RequestMethod.GET)
     ResponseEntity<InputStreamResource> createNewWallet(@PathVariable String password) throws Exception {
-        File file = web3jService.newWallet(password);
-        return ResponseEntity.ok().headers(headers(file)).body(new InputStreamResource(new FileInputStream(file)));
+        FileContent fileContent = web3jService.newWallet(password);
+        return ResponseEntity.ok().headers(headers(fileContent.getFileName())).body(new InputStreamResource(fileContent.getInputStream()));
     }
 
     // 导入钱包 key.json文件导入
@@ -64,10 +64,10 @@ public class Web3jController {
         }
     }
 
-    public HttpHeaders headers(File file) {
+    public HttpHeaders headers(String fileName) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.set(HttpHeaders.CONTENT_DISPOSITION,"attachment;filename*=UTF-8''"+encode(file.getName()));
+        httpHeaders.set(HttpHeaders.CONTENT_DISPOSITION,"attachment;filename*=UTF-8''"+encode(fileName));
         return httpHeaders;
     }
 
