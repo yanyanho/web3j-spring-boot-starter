@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
@@ -31,14 +33,18 @@ import org.web3j.tx.Contract;
 import org.web3j.tx.RawTransactionManager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.web3j.spring.wallet.Web3jService.gas_price;
@@ -114,11 +120,28 @@ public class WalletTest extends ApiTestBase{
     }
 
     @Test public void testCreateNewWallet() throws Exception {
-
         InputStream inputStream = new ClassPathResource("wallet/"+"UTC--2018-05-10T06-35-26.535000000Z--b6ac716329c5995e9a64899cd44ca5900bd98530.json").getInputStream();
-       FileContent file = web3jService.newWallet("hsy123456");
+       FileContent file = web3jService.newWallet("hsy123456XXX"); // XXX
        assertNotNull(file);
        assertNotNull(file.getFileName());
+    }
+
+    @Test public void testClassPathResource() throws Exception {
+        File file = new ClassPathResource("wallet/"+"UTC--2018-05-10T06-35-26.535000000Z--b6ac716329c5995e9a64899cd44ca5900bd98530.json").getFile();
+       assertNotNull(file);
+    }
+
+    @Test public void testLoadWallet() throws Exception {
+        File dir = new File( new ClassPathResource("wallet5").getPath());
+        dir.mkdir();
+        File origin = new ClassPathResource("wallet2/"+"UTC--2018-05-10T06-35-26.535000000Z--b6ac716329c5995e9a64899cd44ca5900bd98530.json").getFile();
+        MultipartFile jsonFile = new MockMultipartFile("1.json","1.json",null, new FileInputStream(origin));
+       // File convFile =  new File( dir.getPath()+jsonFile.getOriginalFilename());
+       // File convFile =   new ClassPathResource("wallet/"+ jsonFile.getOriginalFilename()).getFile();
+        //jsonFile.transferTo(convFile);
+        Credentials credentials =web3jService.loadCredentialsByJsonFile("hsy19910520",jsonFile);
+       assertEquals(credentials.getAddress(),"0xb6ac716329c5995e9a64899cd44ca5900bd98530");
+
     }
 
 }

@@ -19,12 +19,14 @@ public class Application {
 
     @Bean
     public Web3j getWeb3j() {
-        return Web3j.build(new HttpService("https://infuranet.infura.io/A6YAM6J99HuuW8LafBEv"));
+        return Web3j.build(new HttpService("https://mainnet.infura.io/A6YAM6J99HuuW8LafBEv"));
     }
 
     @Bean
     public  RestTemplate getRestTemplate() {
         return new RestTemplate();
     }
+
+
 
 }

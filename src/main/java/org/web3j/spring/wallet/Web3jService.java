@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
@@ -24,9 +26,7 @@ import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -45,6 +45,8 @@ public class Web3jService {
     @Autowired
     Web3j web3j;
 
+    public static final Logger logger = LoggerFactory.getLogger(Web3jService.class);
+
     public static final BigInteger gas_price = BigInteger.valueOf(2_000_000_000L);
 
     //private Credentials credentials;
@@ -61,9 +63,24 @@ public class Web3jService {
 //        return WalletUtils.loadCredentials(password, jsonFile);
 //    }
 
-    public Credentials loadCredentialsByJsonFile(String password, File jsonFile) throws IOException, CipherException {
+    public Credentials loadCredentialsByJsonFile(String password, MultipartFile jsonFile) throws IOException, CipherException {
+
+        //File dir = new File(new ClassPathResource("wallet").getPath());
+        //dir.mkdirs();
+       // File convFile = new File(new ClassPathResource("wallet/"+jsonFile.getName()).getPath());
+       // logger.info("**************+convFile is ***" +convFile.getAbsolutePath() );
+        //convFile.mkdirs();
+        //jsonFile.transferTo(convFile);
+       // File file= new File("1.json");
+        File convFile = new File(jsonFile.getOriginalFilename());
+        convFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(jsonFile.getBytes());
+        fos.close();
+
+
         //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
-        return WalletUtils.loadCredentials(password, jsonFile);
+        return WalletUtils.loadCredentials(password, convFile);
     }
 
 

@@ -1,44 +1,55 @@
 package org.web3j.spring.wallet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+
 @RestController
 public class Web3jController {
     @Autowired
     Web3jService web3jService;
+    public static final Logger logger = LoggerFactory.getLogger(Web3jController.class);
 
+    BigInteger eth = new BigInteger("1000000000000000");
     //创建钱包 输入密码，返回json文件
-    @RequestMapping(value = "/new-wallet/{password}", method = RequestMethod.GET)
-    ResponseEntity<InputStreamResource> createNewWallet(@PathVariable String password) throws Exception {
+    @RequestMapping(value = "/new-wallet", method = RequestMethod.GET)
+    ResponseEntity<InputStreamResource> createNewWallet(@RequestParam String password) throws Exception {
         FileContent fileContent = web3jService.newWallet(password);
         return ResponseEntity.ok().headers(headers(fileContent.getFileName())).body(new InputStreamResource(fileContent.getInputStream()));
     }
 
     // 导入钱包 key.json文件导入
-    @RequestMapping(value = "/load-wallet/{password}", method = RequestMethod.GET)
-    Credentials loadCredentialsByFJsonFileAndPassword(@PathVariable String password, File jsonFile ) throws Exception {
+    @RequestMapping(value = "/load-wallet", method = RequestMethod.POST)
+    Credentials loadCredentialsByFJsonFileAndPassword(@RequestParam String password, MultipartFile jsonFile ) throws Exception {
+       // File convFile = new File( jsonFile.getOriginalFilename());
+        logger.info("**************+jsonFile*****is   " +jsonFile.getName() );
       return  web3jService.loadCredentialsByJsonFile(password, jsonFile);
     }
 
    //查看余额
     @RequestMapping(value = "/{address}/balance", method = RequestMethod.GET)
-    BigInteger getBalance(@PathVariable String address) {
-        return web3jService.getBalance(address);
+    double getBalance(@PathVariable String address) {
+        return web3jService.getBalance(address).divide(eth).doubleValue()/1000;
     }
+
     //转账
     @RequestMapping(value = "/transfer", method = RequestMethod.GET)
     TransactionReceipt transfer(@RequestParam String address, @RequestParam double value, @RequestParam Credentials credentials) throws Exception {
@@ -81,4 +92,6 @@ public class Web3jController {
     String getVersion() {
         return web3jService.getClientVersion();
     }
+
+
 }

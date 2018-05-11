@@ -2,4 +2,4 @@
 ##  client-address: https://mainnet.infura.io/A6YAM6J99HuuW8LafBEv
 ##  admin-client: false
 ##  httpTimeoutSeconds: 600
-spring.resources.static-locations=classpath:/resources/
+#spring.resources.static-locations=classpath:/resources/
