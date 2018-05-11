@@ -39,8 +39,6 @@ public class Web3jController {
     // 导入钱包 key.json文件导入
     @RequestMapping(value = "/load-wallet", method = RequestMethod.POST)
     Credentials loadCredentialsByFJsonFileAndPassword(@RequestParam String password, MultipartFile jsonFile ) throws Exception {
-       // File convFile = new File( jsonFile.getOriginalFilename());
-        logger.info("**************+jsonFile*****is   " +jsonFile.getName() );
       return  web3jService.loadCredentialsByJsonFile(password, jsonFile);
     }
 
