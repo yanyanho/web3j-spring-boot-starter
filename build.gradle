@@ -49,6 +49,8 @@ dependencies {
     compile "org.springframework:spring-test:4.3.12.RELEASE"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     compile "org.projectlombok:lombok"
+
+    compile "cn.edu.hfut.dmic.webcollector:WebCollector:2.71"
 //    compile "org.flywaydb:flyway-core"
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
 //    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.4.2'

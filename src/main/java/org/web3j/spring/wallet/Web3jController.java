@@ -44,6 +44,16 @@ public class Web3jController {
       return  web3jService.loadCredentialsByJsonFile(password, jsonFile);
     }
 
+    // 导入钱包 私钥导入 区分十六进制还是十进制
+    @RequestMapping(value = "/load-wallet", method = RequestMethod.GET)
+    Credentials loadCredentialsByPrivateKey(@RequestParam String privateKey ) throws Exception {
+        String pkHex= privateKey;
+        if(privateKey.length()!=64) {
+            pkHex = new BigInteger(privateKey).toString(16);
+        }
+        return Credentials.create(pkHex);
+    }
+
    //查看余额
     @RequestMapping(value = "/{address}/balance", method = RequestMethod.GET)
     double getBalance(@PathVariable String address) {
@@ -51,20 +61,27 @@ public class Web3jController {
     }
 
     //转账
-    @RequestMapping(value = "/transfer", method = RequestMethod.GET)
-    CompletableFuture<TransactionReceipt> transfer(@RequestParam String address, @RequestParam double value, @RequestBody Credentials credentials) throws Exception {
-        return web3jService.transaction(address, value, credentials);
+    @RequestMapping(value = "/transfer", method = RequestMethod.PUT)
+    TransactionReceipt transfer(@RequestParam String address, @RequestParam double value, @RequestParam String privateKey ) throws Exception {
+        String pkHex = new BigInteger(privateKey).toString(16);
+        return web3jService.transaction(address, value,  Credentials.create(pkHex));
     }
+
+    //转账ERC20
+    @RequestMapping(value="/transfer/erc20", method = RequestMethod.PUT)
+    String transferErc20(@RequestParam  String contractAddress ,@RequestParam  String privateKey , @RequestParam String toAddress, @RequestParam double amount) throws Exception {
+        String pkHex= privateKey;
+        if(privateKey.length()!=64) {
+             pkHex = new BigInteger(privateKey).toString(16);
+        }
+        return   web3jService.transactionErc20Token(contractAddress, Credentials.create(pkHex), toAddress, amount);
+    }
+
 
     //获取交易详情
     @RequestMapping(value = "/transaction/{transactionHash}", method = RequestMethod.GET)
     TransactionReceipt transfer(@RequestParam String transactionHash) throws Exception {
         return web3jService.ethGetTransactionReceipt(transactionHash);
-    }
-
-    @RequestMapping(value="/transfer/erc20", method = RequestMethod.GET)
-    String transfer(@RequestParam  String contractAddress ,@RequestBody  Credentials credentials , @RequestParam String toAddress, @RequestParam double amount) throws Exception {
-        return   web3jService.transactionErc20Token(contractAddress, credentials, toAddress, amount);
     }
 
     private String encode(String name){

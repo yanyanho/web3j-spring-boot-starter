@@ -85,8 +85,9 @@ public class Web3jService {
     }
 
 
-    public CompletableFuture<TransactionReceipt> transaction(String address, double ethBalance, Credentials credentials) throws Exception {
-        return Transfer.sendFunds(web3j, credentials, address, BigDecimal.valueOf(ethBalance), Convert.Unit.ETHER).sendAsync();
+    public TransactionReceipt transaction(String address, double ethBalance, Credentials credentials) throws Exception {
+        logger.info("*********ADDRESS********* " + credentials.getAddress());
+        return Transfer.sendFunds(web3j, credentials, address, BigDecimal.valueOf(ethBalance), Convert.Unit.ETHER).send();
     }
 
 

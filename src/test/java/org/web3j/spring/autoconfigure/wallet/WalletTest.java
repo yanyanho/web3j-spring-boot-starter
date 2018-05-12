@@ -63,7 +63,7 @@ public class WalletTest extends ApiTestBase{
     @Test
      public  void transferTest() {
         RestTemplate restTemplate= new RestTemplate();
-
+//https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x57d90b64a1a57749b0f932f1a3395792e12e7055&address=0xe04f27eb70e025b78871a2ad7eabe85e61212761&tag=latest&apikey=YourApiKeyToken
        // ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://api.etherscan.io/api?module=contract&action=getabi&address=0xcb97e65f07da24d46bcdd078ebebd7c6e6e3d750&apikey=2QJHBURFK52GJSFSNHCJA37P6I9JC14YPK", String.class);
         ResponseEntity<String> responseEntity = restTemplate.getForEntity("https://etherscan.io/address/0xb5a05cdddc65516463674c88fb0cc91d9f62342a", String.class);
        // ResponseEntity<String> responseEntity = restTemplate.getForEntity("https://etherscan.io/address/0xf8a06ef897755bbd49707d8a8ce0ca9e6a0f0c34&apikey=2QJHBURFK52GJSFSNHCJA37P6I9JC14YPK", String.class);
@@ -152,9 +152,19 @@ public class WalletTest extends ApiTestBase{
                 WalletUtils.loadCredentials(
                         "hsy19910520",
                         "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
+          System.out.println(credentials.getEcKeyPair().getPrivateKey());
+          String pr = "57043026691738733056252641900788096178513846282170550194593777662393432978057";
+          String pr1 = "8c5af3d623dad6786dbe24d17d8047a168dd0ed1033035ef6784fe78a69af20d";
 
+          String pkhex = new BigInteger(pr,10).toString(16);
+        String pk1hex = new BigInteger(pr1,16).toString(16);
+        System.out.println(pk1hex.length());
+        String add = Credentials.create(pkhex).getAddress();
+        String add1 = Credentials.create(pk1hex).getAddress();
+        System.out.println(add); //0x4fdb0369cbaf8fb9282f228eb94e6c44314ee3d0
+        System.out.println(add1);
 
-        CompletableFuture<TransactionReceipt> transactionReceipt =  web3jService.transaction("0x797EBd22372f3941d16D51fE98e840BFfd20FDB9",0.00001,credentials);
+        TransactionReceipt transactionReceipt =  web3jService.transaction("0x797EBd22372f3941d16D51fE98e840BFfd20FDB9",0.00001,Credentials.create("57043026691738733056252641900788096178513846282170550194593777662393432978057"));
         assertNotNull(transactionReceipt);
     }
 

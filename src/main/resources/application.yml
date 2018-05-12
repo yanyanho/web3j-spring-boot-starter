@@ -3,3 +3,7 @@
 ##  admin-client: false
 ##  httpTimeoutSeconds: 600
 #spring.resources.static-locations=classpath:/resources/
+spring:
+  mvc:
+    async:
+      request-timeout: -1
