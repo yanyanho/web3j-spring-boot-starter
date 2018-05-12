@@ -23,6 +23,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.spring.autoconfigure.ApiTestBase;
@@ -42,6 +43,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -142,6 +144,18 @@ public class WalletTest extends ApiTestBase{
         Credentials credentials =web3jService.loadCredentialsByJsonFile("hsy19910520",jsonFile);
        assertEquals(credentials.getAddress(),"0xb6ac716329c5995e9a64899cd44ca5900bd98530");
 
+    }
+
+    @Test
+    public void testTransfer() throws Exception {
+        Credentials credentials =
+                WalletUtils.loadCredentials(
+                        "hsy19910520",
+                        "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
+
+
+        CompletableFuture<TransactionReceipt> transactionReceipt =  web3jService.transaction("0x797EBd22372f3941d16D51fE98e840BFfd20FDB9",0.00001,credentials);
+        assertNotNull(transactionReceipt);
     }
 
 }

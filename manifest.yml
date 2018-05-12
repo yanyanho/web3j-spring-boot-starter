@@ -1,6 +1,6 @@
 ---
 applications:
 - name: wallet
-  memory: 768M
+  memory: 2G
   instances: 1
   random-route: true

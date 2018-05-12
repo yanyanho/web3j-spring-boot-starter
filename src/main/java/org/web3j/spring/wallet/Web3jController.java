@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
@@ -28,7 +29,8 @@ public class Web3jController {
     Web3jService web3jService;
     public static final Logger logger = LoggerFactory.getLogger(Web3jController.class);
 
-    BigInteger eth = new BigInteger("1000000000000000");
+    BigInteger eth = new BigInteger("1000000000000");
+
     //创建钱包 输入密码，返回json文件
     @RequestMapping(value = "/new-wallet", method = RequestMethod.GET)
     ResponseEntity<InputStreamResource> createNewWallet(@RequestParam String password) throws Exception {
@@ -45,12 +47,12 @@ public class Web3jController {
    //查看余额
     @RequestMapping(value = "/{address}/balance", method = RequestMethod.GET)
     double getBalance(@PathVariable String address) {
-        return web3jService.getBalance(address).divide(eth).doubleValue()/1000;
+        return web3jService.getBalance(address).divide(eth).doubleValue()/1000000;
     }
 
     //转账
     @RequestMapping(value = "/transfer", method = RequestMethod.GET)
-    TransactionReceipt transfer(@RequestParam String address, @RequestParam double value, @RequestParam Credentials credentials) throws Exception {
+    CompletableFuture<TransactionReceipt> transfer(@RequestParam String address, @RequestParam double value, @RequestBody Credentials credentials) throws Exception {
         return web3jService.transaction(address, value, credentials);
     }
 
@@ -61,7 +63,7 @@ public class Web3jController {
     }
 
     @RequestMapping(value="/transfer/erc20", method = RequestMethod.GET)
-    String transfer(@RequestParam  String contractAddress ,@RequestParam  Credentials credentials , @RequestParam String toAddress, @RequestParam double amount) throws Exception {
+    String transfer(@RequestParam  String contractAddress ,@RequestBody  Credentials credentials , @RequestParam String toAddress, @RequestParam double amount) throws Exception {
         return   web3jService.transactionErc20Token(contractAddress, credentials, toAddress, amount);
     }
 

@@ -32,6 +32,7 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -84,8 +85,8 @@ public class Web3jService {
     }
 
 
-    public TransactionReceipt transaction(String address, double ethBalance, Credentials credentials) throws Exception {
-        return Transfer.sendFunds(web3j, credentials, address, BigDecimal.valueOf(ethBalance), Convert.Unit.ETHER).send();
+    public CompletableFuture<TransactionReceipt> transaction(String address, double ethBalance, Credentials credentials) throws Exception {
+        return Transfer.sendFunds(web3j, credentials, address, BigDecimal.valueOf(ethBalance), Convert.Unit.ETHER).sendAsync();
     }
 
 
