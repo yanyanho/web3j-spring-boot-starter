@@ -49,6 +49,9 @@ dependencies {
     compile "org.springframework:spring-test:4.3.12.RELEASE"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     compile "org.projectlombok:lombok"
+    // https://mvnrepository.com/artifact/com.github.dreamhead/moco-core
+    compile group: 'com.github.dreamhead', name: 'moco-core', version: '0.12.0'
+
 
 //    compile ('cn.edu.hfut.dmic.webcollector:WebCollector:2.71') {
 //        exclude group: 'org.slf4j'
