@@ -5,7 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -23,11 +26,14 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.spring.autoconfigure.ApiTestBase;
 import org.web3j.spring.token.Erc20TokenWrapper;
+import org.web3j.spring.util.TransactionReceiptWithMore;
+import org.web3j.spring.util.TransactionResult;
 import org.web3j.spring.wallet.FileContent;
 import org.web3j.spring.wallet.Web3jService;
 import org.web3j.tx.Contract;
@@ -41,8 +47,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,10 +72,24 @@ public class WalletTest extends ApiTestBase{
      public  void transferTest() {
         RestTemplate restTemplate= new RestTemplate();
 //https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x57d90b64a1a57749b0f932f1a3395792e12e7055&address=0xe04f27eb70e025b78871a2ad7eabe85e61212761&tag=latest&apikey=YourApiKeyToken
-       // ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://api.etherscan.io/api?module=contract&action=getabi&address=0xcb97e65f07da24d46bcdd078ebebd7c6e6e3d750&apikey=2QJHBURFK52GJSFSNHCJA37P6I9JC14YPK", String.class);
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity("https://etherscan.io/address/0xb5a05cdddc65516463674c88fb0cc91d9f62342a", String.class);
-       // ResponseEntity<String> responseEntity = restTemplate.getForEntity("https://etherscan.io/address/0xf8a06ef897755bbd49707d8a8ce0ca9e6a0f0c34&apikey=2QJHBURFK52GJSFSNHCJA37P6I9JC14YPK", String.class);
-         System.out.println(responseEntity.getBody());;
+       ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://api.etherscan.io/api?module=contract&action=getabi&address=0xcb97e65f07da24d46bcdd078ebebd7c6e6e3d750&apikey=YourApiKeyToken", String.class);
+       // ResponseEntity<String> responseEntity = restTemplate.getForEntity("https://etherscan.io/address/0xb5a05cdddc65516463674c88fb0cc91d9f62342a", String.class);
+       //ResponseEntity<String> responseEntity = restTemplate.getForEntity("https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x57d90b64a1a57749b0f932f1a3395792e12e7055&apikey=YourApiKeyToken", String.class);
+         System.out.println(responseEntity.getBody());
+
+    }
+
+
+    @Test
+    public  void testGetTransactionListByAddress() {
+        RestTemplate restTemplate= new RestTemplate();
+        ParameterizedTypeReference<List<TransactionReceipt>> typeRef = new ParameterizedTypeReference<List<TransactionReceipt>>() {};
+        ResponseEntity<TransactionResult> responseEntity = restTemplate.getForEntity("http://api.etherscan.io/api?module=account&action=txlist&address=0x797EBd22372f3941d16D51fE98e840BFfd20FDB9&sort=asc", TransactionResult.class);
+       // ResponseEntity<TransactionResult> responseEntity = restTemplate.exchange("http://api.etherscan.io/api?module=account&action=txlist&address=0x797EBd22372f3941d16D51fE98e840BFfd20FDB9&sort=asc", HttpMethod.GET, null,typeRef);
+
+        List<TransactionReceiptWithMore> result = web3jService.getTransactionLogByAddress("0x797EBd22372f3941d16D51fE98e840BFfd20FDB9");
+        System.out.println(responseEntity.getBody().getResult());
+        System.out.println(result.get(0));
 
     }
 

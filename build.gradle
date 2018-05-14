@@ -50,7 +50,21 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     compile "org.projectlombok:lombok"
 
-    compile "cn.edu.hfut.dmic.webcollector:WebCollector:2.71"
+//    compile ('cn.edu.hfut.dmic.webcollector:WebCollector:2.71') {
+//        exclude group: 'org.slf4j'
+//    }
+
+   compile ('us.codecraft:webmagic-core:0.7.3') {
+       exclude group: 'org.slf4j'
+   }
+   compile ('us.codecraft:webmagic-extension:0.7.3') {
+       exclude group: 'org.slf4j'
+   }
+
+//{
+  //  exclude group: 'org.slf4j'
+//}
+
 //    compile "org.flywaydb:flyway-core"
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
 //    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.4.2'

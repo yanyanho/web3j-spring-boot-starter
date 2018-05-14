@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.spring.util.TransactionReceiptWithMore;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -78,10 +80,17 @@ public class Web3jController {
     }
 
 
+
     //获取交易详情
     @RequestMapping(value = "/transaction/{transactionHash}", method = RequestMethod.GET)
-    TransactionReceipt transfer(@RequestParam String transactionHash) throws Exception {
+    TransactionReceipt getTransactionLogByHash(@PathVariable String transactionHash) throws Exception {
         return web3jService.ethGetTransactionReceipt(transactionHash);
+    }
+
+    //获取某地址的交易记录
+    @RequestMapping(value = "/transaction/address/{address}", method = RequestMethod.GET)
+    List<TransactionReceiptWithMore> getTransactionLogByAddress(@PathVariable String  address) throws Exception {
+        return web3jService.getTransactionLogByAddress(address);
     }
 
     private String encode(String name){
