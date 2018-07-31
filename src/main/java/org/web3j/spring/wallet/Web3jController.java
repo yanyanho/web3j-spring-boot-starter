@@ -88,10 +88,10 @@ public class Web3jController {
     }
 
     //获取某地址的交易记录
-    @RequestMapping(value = "/transaction/address/{address}", method = RequestMethod.GET)
-    List<TransactionReceiptWithMore> getTransactionLogByAddress(@PathVariable String  address) throws Exception {
-        return web3jService.getTransactionLogByAddress(address);
-    }
+//    @RequestMapping(value = "/transaction/address/{address}", method = RequestMethod.GET)
+//    List<TransactionReceiptWithMore> getTransactionLogByAddress(@PathVariable String  address) throws Exception {
+//        return web3jService.getTransactionLogByAddress(address);
+//    }
 
     private String encode(String name){
         try {
@@ -109,10 +109,10 @@ public class Web3jController {
     }
 
 
-    //    @RequestMapping(value="/transfer/password", method = RequestMethod.GET)
-//    void transfer(@RequestParam  String address , @RequestParam  String password , @RequestParam  String toAddress , @RequestParam double value) throws Exception {
-//           web3jService.unlockWallet(address, password, toAddress,  value);
-//    }
+        @RequestMapping(value="/transfer/password", method = RequestMethod.GET)
+    void transfer(@RequestParam  String address , @RequestParam  String password , @RequestParam  String toAddress , @RequestParam double value) throws Exception {
+         //  web3jService.unlockWallet(address, password, toAddress,  value);
+    }
 
     @RequestMapping(value = "/version", method = RequestMethod.GET)
     String getVersion() {

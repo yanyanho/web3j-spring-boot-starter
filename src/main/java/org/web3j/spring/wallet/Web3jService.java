@@ -53,7 +53,7 @@ public class Web3jService {
 
     public static final Logger logger = LoggerFactory.getLogger(Web3jService.class);
 
-    public static final BigInteger gas_price = BigInteger.valueOf(2_000_000_000L);
+    public static final BigInteger gas_price = BigInteger.valueOf(10_000_000_000L);
 
     //private Credentials credentials;
 
@@ -82,9 +82,10 @@ public class Web3jService {
        // File file= new File("1.json");
         File convFile = new File(jsonFile.getOriginalFilename());
         convFile.createNewFile();
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(jsonFile.getBytes());
-        fos.close();
+        try (FileOutputStream fos = new FileOutputStream(convFile)) {
+            fos.write(jsonFile.getBytes());
+            fos.close();
+        }
 
 
         //credentials = WalletUtils.loadCredentials(password,  "/UTC--2017-08-21T11-49-30.013Z--8c17ea160c092ae854f81580396ba570d9e62e24.json");
@@ -191,10 +192,10 @@ public class Web3jService {
         return transactionResponse.getTransactionHash();
     }
 
-    public List<TransactionReceiptWithMore> getTransactionLogByAddress(String address) {
-        ResponseEntity<TransactionResult> responseEntity = restTemplate.getForEntity("http://api.etherscan.io/api?module=account&action=txlist&address=0x797EBd22372f3941d16D51fE98e840BFfd20FDB9&sort=asc", TransactionResult.class);
-         return responseEntity.getBody().getResult();
-    }
+//    public List<TransactionReceipt> getTransactionLogByAddress(String address) {
+//        ResponseEntity<TransactionReceiptWithMore> responseEntity = restTemplate.getForEntity("http://api.etherscan.io/api?module=account&action=txlist&address=0x797EBd22372f3941d16D51fE98e840BFfd20FDB9&sort=asc", TransactionResult.class);
+//         return responseEntity.getBody().;
+//    }
 }
 
 

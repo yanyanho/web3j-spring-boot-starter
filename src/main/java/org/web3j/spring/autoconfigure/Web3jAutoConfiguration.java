@@ -28,7 +28,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * web3j auto configuration for Spring Boot.
  */
 @Configuration
-@ConditionalOnClass(Web3j.class)
+//@ConditionalOnClass(Web3j.class)
 @EnableConfigurationProperties(Web3jProperties.class)
 public class Web3jAutoConfiguration {
 

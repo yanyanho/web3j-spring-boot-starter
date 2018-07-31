@@ -1,8 +1,10 @@
 package org.web3j.spring.actuate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.context.annotation.Bean;
 import org.springframework.util.Assert;
 import org.web3j.protocol.Web3j;
 
@@ -21,6 +23,7 @@ public class Web3jHealthIndicator extends AbstractHealthIndicator {
     public Web3jHealthIndicator(Web3j web3j) {
         Assert.notNull(web3j, "Web3j must not be null");
         this.web3j = web3j;
+        System.out.println("health is instance!!!!!!");
     }
 
     @Override

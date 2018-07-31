@@ -45,8 +45,10 @@ dependencies {
 
     compile 'org.web3j:web3j-spring-boot-starter:1.6.0'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework:spring-test:4.3.12.RELEASE"
+    compile ('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: 'spring-boot-starter'
+    }
+   // compile "org.springframework:spring-test:4.3.12.RELEASE"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     compile "org.projectlombok:lombok"
     // https://mvnrepository.com/artifact/com.github.dreamhead/moco-core
@@ -76,7 +78,7 @@ dependencies {
     //compile("org.springframework.boot:spring-boot-starter-parent:1.2.5.RELEASE")
     //compile 'org.springframework.boot:spring-boot-starter-security'
     testCompile 'junit:junit:4.12',
-            "org.springframework.boot:spring-boot-test",
+           // "org.springframework.boot:spring-boot-test",
             "org.springframework.boot:spring-boot-starter-test",
             "com.github.macdao:moscow:0.1.0",
             "com.squareup.okhttp3:okhttp:3.1.2"
