@@ -69,6 +69,13 @@ public class Web3jController {
         return web3jService.transaction(address, value,  Credentials.create(pkHex));
     }
 
+    //转账
+    @RequestMapping(value = "/transfer/words", method = RequestMethod.PUT)
+    String transferWords(@RequestParam String address, @RequestParam double value, @RequestParam String privateKey , @RequestParam String words ) throws Exception {
+        String pkHex = new BigInteger(privateKey).toString(16);
+        return web3jService.sendWordsTransaction(address,  Credentials.create(pkHex),words).getTransactionHash();
+    }
+
     //转账ERC20
     @RequestMapping(value="/transfer/erc20", method = RequestMethod.PUT)
     String transferErc20(@RequestParam  String contractAddress ,@RequestParam  String privateKey , @RequestParam String toAddress, @RequestParam double amount) throws Exception {

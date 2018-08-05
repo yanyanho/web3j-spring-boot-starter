@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.web3j.abi.FunctionEncoder;
@@ -23,8 +21,6 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.spring.token.Erc20TokenWrapper;
-import org.web3j.spring.util.TransactionReceiptWithMore;
-import org.web3j.spring.util.TransactionResult;
 import org.web3j.tx.Contract;
 import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.Transfer;
@@ -33,14 +29,9 @@ import org.web3j.utils.Convert;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 
 
 //https://stevenocean.github.io/2018/04/06/web3j-ethereum-token.html
@@ -183,14 +174,21 @@ public class Web3jService {
         String encodedFunction = FunctionEncoder.encode(function);
 
         // 创建 tx 管理器，并通过 txManager 来发起合约转账
-        RawTransactionManager txManager = new RawTransactionManager(web3j, credentials);
-        EthSendTransaction transactionResponse = txManager.sendTransaction(
-                gas_price, Contract.GAS_LIMIT,
-                contractAddress, encodedFunction, BigInteger.ZERO);
+        EthSendTransaction transactionResponse = sendWordsTransaction(contractAddress, credentials, encodedFunction);
 
         // 获取 TxHash
         return transactionResponse.getTransactionHash();
     }
+
+    public EthSendTransaction sendWordsTransaction(String address, Credentials credentials, String words) throws IOException {
+        RawTransactionManager txManager = new RawTransactionManager(web3j, credentials);
+        return txManager.sendTransaction(
+                gas_price, Contract.GAS_LIMIT,
+                address, words, BigInteger.ZERO);
+    }
+
+
+
 
 //    public List<TransactionReceipt> getTransactionLogByAddress(String address) {
 //        ResponseEntity<TransactionReceiptWithMore> responseEntity = restTemplate.getForEntity("http://api.etherscan.io/api?module=account&action=txlist&address=0x797EBd22372f3941d16D51fE98e840BFfd20FDB9&sort=asc", TransactionResult.class);

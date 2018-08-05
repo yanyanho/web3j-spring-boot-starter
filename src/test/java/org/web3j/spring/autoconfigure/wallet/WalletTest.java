@@ -197,6 +197,7 @@ public class WalletTest extends ApiTestBase {
         assertNotNull(transactionReceipt);
     }
 
+    //对数据进行RLP 压缩，然后hash
     @Test
     public void testTransferWord() throws IOException, CipherException {
 

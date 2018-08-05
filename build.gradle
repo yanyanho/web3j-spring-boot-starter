@@ -43,7 +43,11 @@ repositories {
 
 dependencies {
 
+
     compile 'org.web3j:web3j-spring-boot-starter:1.6.0'
+    compile fileTree(dir: 'lib', include: ' *.jar')
+//    compile 'LV02:cmb-blockchain-sdk:1.0.0-GBATFP-SNAPSHOT'
+//    compile 'LV02:cmb-blockchain-sdk:1.0.0-SNAPSHOT'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile ('org.springframework.boot:spring-boot-starter-web') {
         exclude group: 'spring-boot-starter'
