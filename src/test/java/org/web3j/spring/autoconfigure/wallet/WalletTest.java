@@ -23,6 +23,7 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.Sign;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -48,6 +49,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -221,4 +223,24 @@ public class WalletTest extends ApiTestBase {
             byte[] result = sha3(bytes);
              System.out.println(Numeric.toHexString(result));
         }
+
+        @Test
+    public void sign() throws IOException, CipherException, SignatureException {
+
+            Credentials credentials =
+                    WalletUtils.loadCredentials(
+                            "hsy19910520",
+                            "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
+        byte[]  messageBytes = "TEST".getBytes();
+            Sign.SignatureData sig =Sign.signMessage(messageBytes, credentials.getEcKeyPair());
+            System.out.println(messageBytes);
+            byte[] result = sha3(messageBytes);
+            String pubKey = Sign.signedMessageToKey(messageBytes, sig).toString(16);
+            System.out.println(pubKey);
+            System.out.println(credentials.getEcKeyPair().getPublicKey().toString(16));
+
+
+        }
+
+
 }
