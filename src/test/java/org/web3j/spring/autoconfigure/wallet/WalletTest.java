@@ -184,8 +184,6 @@ public class WalletTest extends ApiTestBase {
                         "hsy19910520",
                         "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
         System.out.println(credentials.getEcKeyPair().getPrivateKey());
-        String pr = "57043026691738733056252641900788096178513846282170550194593777662393432978057";
-        String pr1 = "8c5af3d623dad6786dbe24d17d8047a168dd0ed1033035ef6784fe78a69af20d";
 
         String pkhex = new BigInteger(pr, 10).toString(16);
         String pk1hex = new BigInteger(pr1, 16).toString(16);
@@ -229,7 +227,7 @@ public class WalletTest extends ApiTestBase {
 
             Credentials credentials =
                     WalletUtils.loadCredentials(
-                            "hsy19910520",
+                            "hsyXXX",
                             "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
         byte[]  messageBytes = "TEST".getBytes();
             Sign.SignatureData sig =Sign.signMessage(messageBytes, credentials.getEcKeyPair());

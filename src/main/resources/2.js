@@ -2,7 +2,7 @@ var Accounts = require('web3-eth-accounts');
 var Web3 = require('web3')
 var web3 = new Web3();
 var accounts = new Accounts();
-var privateKey1 = "0x7196933fe363871920c59be78aa5c478bf6e6271532db5d0ce3b090518f91f03"
+
 var acc = accounts.privateKeyToAccount(privateKey1);
 console.log(acc);
 var sig = acc.sign('TEST');
