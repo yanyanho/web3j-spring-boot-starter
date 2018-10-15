@@ -179,22 +179,22 @@ public class WalletTest extends ApiTestBase {
 
     @Test
     public void testTransfer() throws Exception {
-        Credentials credentials =
-                WalletUtils.loadCredentials(
-                        "hsy19910520",
-                        "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
-        System.out.println(credentials.getEcKeyPair().getPrivateKey());
-
-        String pkhex = new BigInteger(pr, 10).toString(16);
-        String pk1hex = new BigInteger(pr1, 16).toString(16);
-        System.out.println(pk1hex.length());
-        String add = Credentials.create(pkhex).getAddress();
-        String add1 = Credentials.create(pk1hex).getAddress();
-        System.out.println(add); //0x4fdb0369cbaf8fb9282f228eb94e6c44314ee3d0
-        System.out.println(add1);
-
-        TransactionReceipt transactionReceipt = web3jService.transaction("0x797EBd22372f3941d16D51fE98e840BFfd20FDB9", 0.00001, Credentials.create("57043026691738733056252641900788096178513846282170550194593777662393432978057"));
-        assertNotNull(transactionReceipt);
+//        Credentials credentials =
+//                WalletUtils.loadCredentials(
+//                        "hsy19910520",
+//                        "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
+//        System.out.println(credentials.getEcKeyPair().getPrivateKey());
+//
+//        String pkhex = new BigInteger(pr, 10).toString(16);
+//        String pk1hex = new BigInteger(pr1, 16).toString(16);
+//        System.out.println(pk1hex.length());
+//        String add = Credentials.create(pkhex).getAddress();
+//        String add1 = Credentials.create(pk1hex).getAddress();
+//        System.out.println(add); //0x4fdb0369cbaf8fb9282f228eb94e6c44314ee3d0
+//        System.out.println(add1);
+//
+//        TransactionReceipt transactionReceipt = web3jService.transaction("0x797EBd22372f3941d16D51fE98e840BFfd20FDB9", 0.00001, Credentials.create("57043026691738733056252641900788096178513846282170550194593777662393432978057"));
+//        assertNotNull(transactionReceipt);
     }
 
     //对数据进行RLP 压缩，然后hash
