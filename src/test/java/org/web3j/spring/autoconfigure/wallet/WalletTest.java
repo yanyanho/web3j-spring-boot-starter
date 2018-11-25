@@ -23,6 +23,7 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.Sign;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -48,6 +49,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -115,6 +117,9 @@ public class WalletTest extends ApiTestBase {
                 "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
 
 
+
+
+
         //直接调用智能合约！！
         Erc20TokenWrapper contract1 = Erc20TokenWrapper.load(contractAddress, web3j, credentials, gas_price, Contract.GAS_LIMIT);
 
@@ -177,24 +182,24 @@ public class WalletTest extends ApiTestBase {
 
     @Test
     public void testTransfer() throws Exception {
-        Credentials credentials =
-                WalletUtils.loadCredentials(
-                        "hsy19910520",
-                        "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
-        System.out.println(credentials.getEcKeyPair().getPrivateKey());
+//        Credentials credentials =
+//                WalletUtils.loadCredentials(
+//                        "hsy19910520",
+//                        "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
+//        System.out.println(credentials.getEcKeyPair().getPrivateKey());
         String pr = "57043026691738733056252641900788096178513846282170550194593777662393432978057";
         String pr1 = "8c5af3d623dad6786dbe24d17d8047a168dd0ed1033035ef6784fe78a69af20d";
 
         String pkhex = new BigInteger(pr, 10).toString(16);
         String pk1hex = new BigInteger(pr1, 16).toString(16);
-        System.out.println(pk1hex.length());
+        System.out.println(pkhex);
         String add = Credentials.create(pkhex).getAddress();
         String add1 = Credentials.create(pk1hex).getAddress();
         System.out.println(add); //0x4fdb0369cbaf8fb9282f228eb94e6c44314ee3d0
         System.out.println(add1);
 
-        TransactionReceipt transactionReceipt = web3jService.transaction("0x797EBd22372f3941d16D51fE98e840BFfd20FDB9", 0.00001, Credentials.create("57043026691738733056252641900788096178513846282170550194593777662393432978057"));
-        assertNotNull(transactionReceipt);
+        //TransactionReceipt transactionReceipt = web3jService.transaction("0x797EBd22372f3941d16D51fE98e840BFfd20FDB9", 0.00001, Credentials.create("57043026691738733056252641900788096178513846282170550194593777662393432978057"));
+      //  assertNotNull(transactionReceipt);
     }
 
     //对数据进行RLP 压缩，然后hash
@@ -221,4 +226,24 @@ public class WalletTest extends ApiTestBase {
             byte[] result = sha3(bytes);
              System.out.println(Numeric.toHexString(result));
         }
+
+        @Test
+    public void sign() throws IOException, CipherException, SignatureException {
+
+            Credentials credentials =
+                    WalletUtils.loadCredentials(
+                            "hsy19910520",
+                            "/Users/ruanyang/Library/Ethereum/testnet/keystore/UTC--2018-01-26T03-49-23.608000000Z--dd46729ee7a43cf328e9927f5429275ac8b904a0.json");
+        byte[]  messageBytes = "hello world".getBytes();
+            Sign.SignatureData sig =Sign.signMessage(messageBytes, credentials.getEcKeyPair());
+            System.out.println(messageBytes);
+            byte[] result = sha3(messageBytes);
+            String pubKey = Sign.signedMessageToKey(messageBytes, sig).toString(16);
+            System.out.println(pubKey);
+            System.out.println(credentials.getEcKeyPair().getPublicKey().toString(16));
+
+
+        }
+
+
 }

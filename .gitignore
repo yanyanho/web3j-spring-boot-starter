@@ -37,3 +37,4 @@ gradle-app.setting
 
 /target
 /out
+/src/test

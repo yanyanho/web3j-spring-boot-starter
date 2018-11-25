@@ -5,6 +5,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.web3j.crypto.Sign;
 import org.web3j.protocol.Web3j;
 import org.web3j.utils.Numeric;
 
@@ -25,6 +26,12 @@ public class SpringApplicationTest {
         byte[] bytes = Numeric.hexStringToByteArray("0x797EBd22372f3941d16D51fE98e840BFfd20FDB9");
         byte[] result = sha3(bytes);
         System.out.println(Numeric.toHexString(result));
+
+
+
+
     }
+
+
 }
 
