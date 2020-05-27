@@ -5,13 +5,21 @@ import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bytes;
+import org.web3j.abi.datatypes.generated.Bytes4;
 import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
+import org.web3j.spring.autoconfigure.CryptoUtil;
 import org.web3j.utils.Numeric;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.SignatureException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
 import static org.web3j.crypto.Hash.sha3;
@@ -72,6 +80,7 @@ public class SpringApplicationTest {
         System.out.println("Signature s value: 0x" + hexS);
 
         String hexString = signatureDataToString(sigData);
+
         System.out.println(hexString);
         //6376237641841063197511976314280597438149211753541909917794154839912978489307502705320406087313832827571435203289817719151821525032884964596839752540411064
     }
@@ -151,5 +160,63 @@ public class SpringApplicationTest {
     }
 
 
-}
+
+    @Test
+    public  void testTransferFromPreSignedHashing(){
+
+        byte[] s = hexStringToBytes("b7656dc5");
+        Address _token = new Address("0xcbbe6ec46746218a5bed5b336ab86a0a22804d39");
+        Address _from= new Address("0x7e5f4552091a69125d5dfcb7b8c2659029395bdf");
+        Address  _to =  new Address("0x14723a09acff6d2a60dcdf7aa4aff308fddc160c");
+        BigInteger _value= new BigInteger("400000");
+
+        BigInteger _fee= new BigInteger("2");
+        BigInteger _nonce= new BigInteger("1");
+        ECKeyPair ecKeyPair = ECKeyPair.create(BigInteger.ONE);
+     //String message = "0xb7656dc5"+
+
+
+   String hashContent = "0xe18c8310a421d1d02e5515321baf4cd3444db444de88754a528156212b5e5205";
+
+//------------------
+        Object[] data = new Object[6];
+        data[0]=_token;
+        data[1]=_from;
+        data[2]=_to;
+        data[3]=_value;
+        data[4]=_fee;
+        data[5]=_nonce;
+        List<byte[]> arrays = Stream.of(data).map(CryptoUtil::toBytes).collect(Collectors.toList());
+        ByteBuffer buffer = ByteBuffer.allocate(arrays.stream().mapToInt(a -> a.length).sum()+4);
+        buffer.put(hexStringToBytes("b7656dc5"));
+        for (byte[] a : arrays) {
+            buffer.put(a);
+        }
+        byte[] array = buffer.array();
+        assert buffer.position() == array.length;
+
+ //----------------
+
+
+        byte[] data1 = CryptoUtil.soliditySha3(_token,_from,_to,_value,_fee,_nonce);
+
+        byte[] hash = Hash.sha3(array);
+        String hash1 = bytesToHex(hash);
+
+        System.out.println( "hash: 0x" + hash1);
+
+        Sign.SignatureData  signatureData  =  Sign.signMessage(array,ecKeyPair);
+        System.out.println( "Signature: 0x" + signatureDataToString(signatureData));
+    }
+
+//0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c
+//0x0000000000000000000000000000000000000000
+//        1000000000000000000000000
+
+   // order(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce) public returns ( bytes32 ){
+//"0x610033b6dd5a08004e46f2097ca09b693d744118",100,"0x0000000000000000000000000000000000000000",200,77784606,1
+
+
+
+    }
 

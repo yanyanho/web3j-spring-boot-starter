@@ -36,3 +36,19 @@
         Released(msg.sender, value);
     }
  }
+
+
+
+
+
+  - it MUST ensure that if participants use the latest valid balance proofs,
+  provided by the official Raiden client, the participants will be able
+  to receive correct final balances at the end of the channel lifecycle
+  - it MUST ensure that the participants cannot cheat by providing an
+  old, valid balance proof of their partner; meaning that their partner MUST
+  receive at least the amount of tokens that he would have received if
+  the latest valid balance proofs are used.
+  - the contract cannot determine if a balance proof is invalid (values
+  are not within the constraints enforced by the official Raiden client),
+  therefore it cannot ensure correctness. Users MUST use the official
+  Raiden clients for signing balance proofs.

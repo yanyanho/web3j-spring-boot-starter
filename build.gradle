@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
+       classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
        // classpath 'org.flywaydb:flyway-gradle-plugin:3.2.1'
         classpath 'com.h2database:h2:1.4.191'
@@ -46,11 +46,14 @@ jar {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://kamax.io/maven/releases/'
+    }
 }
 
 dependencies {
 
-
+    compile 'io.kamax:matrix-java-sdk:0.0.17'
     compile 'org.web3j:web3j-spring-boot-starter:1.6.0'
    // compile fileTree(dir: 'lib', include: ' *.jar')
 //    compile 'LV02:cmb-blockchain-sdk:1.0.0-ain-sdk:1.0.0-SNAPSHOT'

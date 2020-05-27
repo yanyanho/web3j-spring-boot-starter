@@ -210,14 +210,14 @@ contract StandardToken is ERC20, BasicToken {
 }
 
 
-contract ZCBLToken is StandardToken {
+contract HEICToken is StandardToken {
 
     string public name = 'ZCBL Token';
     string public symbol = 'ZCBL';
     uint public decimals = 18;
     uint public INITIAL_SUPPLY = 21000000*10**decimals;
 
-    function ZCBLToken() {
+    function HEICToken() {
         totalSupply_ = INITIAL_SUPPLY;
         balances[msg.sender] = INITIAL_SUPPLY;
     }
